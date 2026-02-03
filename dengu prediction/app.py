@@ -95,11 +95,12 @@ if st.button("Predict Dengue"):
         elif ns1_val == 1 and igg_val == 1 and igm_val == 0:
             st.error("⚠️ Dengue Detected (Medical Rule)") 
         elif ns1_val==1 and igg_val==0 and igm_val==0:
-            st.error("No Dengue Detected ")
+            st.error(" Dengue Detected ")
         elif ns1_val == 1 and igg_val == 1 and igm_val == 1:
             st.error("⚠️ Dengue Detected (Medical Rule)") 
         elif ns1_val==1 and igg_val==0 and igm_val==1:
             st.error("No Dengue Detected ")
+       
         else:
             prediction = dengue_model.predict(final_input)
 
