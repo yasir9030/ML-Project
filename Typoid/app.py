@@ -2,79 +2,96 @@ import streamlit as st
 import numpy as np
 import pickle
 
+# =============================
 # PAGE CONFIG
-
+# =============================
 st.set_page_config(
     page_title="Typhoid Prediction System",
     layout="wide"
 )
 
+# =============================
 # LOAD MODEL
-
+# =============================
 model = pickle.load(open("Model/Typhoid  prediction.sav", "rb"))
 
-
-# CUSTOM CSS (BIG INPUTS + TEXT)
-
+# =============================
+# SAFE PROFESSIONAL CSS
+# =============================
 st.markdown("""
 <style>
+
 /* Title */
 .big-title {
-    font-size: 42px;
-    font-weight: bold;
-    color: #1f4e79;
+    font-size: 48px;
+    font-weight: 900;
+    color: #0d47a1;
     text-align: center;
+    margin-bottom: 10px;
 }
 
-/* Section headings */
+/* Section title */
 .section-title {
-    font-size: 26px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #2e7d32;
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 15px;
+    color: #1b5e20;
 }
 
 /* Labels */
 label {
-    font-size: 20px !important;
-    font-weight: bold !important;
+    font-size: 24px !important;
+    font-weight: 700 !important;
 }
 
-/* Number input & select box text */
-input, select {
-    font-size: 20px !important;
-    height: 45px !important;
+/* Number inputs */
+input[type="number"] {
+    font-size: 22px !important;
+    height: 65px !important;
+    border-radius: 8px;
 }
 
-/* Dropdown selected text */
+/* Selectbox */
 div[data-baseweb="select"] > div {
-    font-size: 20px !important;
+    font-size: 22px !important;
+    min-height: 65px !important;
+    border-radius: 8px;
 }
 
 /* Button */
 .stButton button {
-    font-size: 22px !important;
+    font-size: 26px !important;
+    height: 70px;
     font-weight: bold;
-    height: 55px;
+    border-radius: 10px;
+    background-color: #1565c0;
+    color: white;
 }
+
+/* Result heading */
+.result-title {
+    font-size: 34px;
+    font-weight: 800;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
-
+# =============================
 # TITLE
+# =============================
 st.markdown('<div class="big-title">🧪 Typhoid Prediction System</div>', unsafe_allow_html=True)
 st.write("Enter patient details and laboratory test values")
-
 st.markdown("---")
 
 # =============================
-# INPUT SECTION (4 COLUMNS)
+# INPUT SECTION
 # =============================
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
     st.markdown('<div class="section-title">Patient Info</div>', unsafe_allow_html=True)
-    Age = st.number_input("Age (years)", min_value=0.0, max_value=120.0, value=28.0)
+    Age = st.number_input("Age (years)", 0.0, 120.0, 28.0)
     Gender = st.selectbox("Gender", ["Male", "Female"])
 
 with col2:
@@ -108,7 +125,7 @@ Acute = 1 if Acute == "Yes" else 0
 ParaA = 1 if ParaA == "Yes" else 0
 ParaB = 1 if ParaB == "Yes" else 0
 
-Name_encoded = 0  # dummy value
+Name_encoded = 0
 
 # =============================
 # PREDICTION
@@ -116,6 +133,7 @@ Name_encoded = 0  # dummy value
 st.markdown("---")
 
 if st.button("🔍 Predict Typhoid", use_container_width=True):
+
     input_data = np.array([[ 
         Name_encoded,
         Age,
@@ -131,11 +149,11 @@ if st.button("🔍 Predict Typhoid", use_container_width=True):
 
     prediction = model.predict(input_data)[0]
 
-    st.markdown("<h2>Prediction Result</h2>", unsafe_allow_html=True)
+    st.markdown('<div class="result-title">Prediction Result</div>', unsafe_allow_html=True)
 
     if prediction == 0:
-        st.warning("🟡 **Minimal Typhoid**")
+        st.warning("🟡 Minimal Typhoid")
     elif prediction == 1:
-        st.success("🟢 **Negative Typhoid**")
+        st.success("🟢 Negative Typhoid")
     else:
-        st.error("🔴 **Positive Typhoid**")
+        st.error("🔴 Positive Typhoid")
